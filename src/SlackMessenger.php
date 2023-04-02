@@ -7,16 +7,13 @@ namespace TurboLabIt\Messengers;
 
 class SlackMessenger extends AbstractBaseMessenger
 {
-    public function sendMessageToChannel(string $message, ?string $channel = null)
+    public function sendMessageToChannel(string $message,)
     {
-        $channel = $channel ?? $this->arrConfig["Slack"]["channel"];
-
         $this->response =
             $this->httpClient->request(
                 'POST',
-                $this->arrConfig["Slack"]["endpoint"], [
+                $this->arrConfig["Slack"]["endpoints"]["main"], [
                     'json' => [
-                        "channel"   => $channel,
                         "text"      => $message
                     ]
                 ]
