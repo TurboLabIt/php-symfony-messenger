@@ -1,0 +1,27 @@
+{
+    "name": "turbolabit/php-symfony-messenger",
+    "description": "A collection of webclients to send messages to Slack, Facebook, Twitter, Telegram, ...",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zane",
+            "email": "info@turbolab.it"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TurboLabIt\\Messengers\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TurboLabIt\\Messengers\\tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.4 || >=8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
