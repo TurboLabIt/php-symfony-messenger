@@ -13,6 +13,8 @@ composer require turbolabit/php-symfony-messenger:dev-main
 
 ## 🌳 2. .env
 
+Get your Slack webhook endpoint from https://api.slack.com/apps
+
 ````
 ## Channel: #my-channel-name https://my-company.slack.com/archives/AAABBCCC
 APP_SLACK_ENDPOINT=https://hooks.slack.com/services/AABBCC/AABBCC/AABBCC
