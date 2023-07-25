@@ -36,6 +36,11 @@ class SlackMessenger extends AbstractBaseMessenger
 
     protected function makeRequest(string $endpoint, array $arrParam, string $method = 'POST')
     {
+        $disabled = array_key_exists("enabled", $this->arrConfig["Slack"]) && empty($this->arrConfig["Slack"]["enabled"]);
+        if($disabled)  {
+            return false;
+        }
+
         $arrErrors = [];
 
         if( empty($endpoint) ) {
