@@ -1,6 +1,8 @@
 ## config/services.yaml
 
-````php
+````yaml
+services:
+
     App\EventListener\CommandFailureListener:
         tags:
             - { name: kernel.event_listener, method: onCommandFailure,  event: console.error }
