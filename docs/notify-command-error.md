@@ -6,7 +6,7 @@
             - { name: kernel.event_listener, method: onCommandFailure,  event: console.error }
 ````
 
-## EventListener/CommandFailureListener.php
+## src/EventListener/CommandFailureListener.php
 
 ````php
 <?php
@@ -19,8 +19,7 @@ use TurboLabIt\Messengers\SlackMessenger;
 class CommandFailureListener
 {
     public function __construct(protected SlackMessenger $slackMessenger)
-    {
-    }
+    { }
 
 
     public function onCommandFailure(ConsoleErrorEvent $event)
