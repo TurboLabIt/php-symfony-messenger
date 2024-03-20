@@ -1,0 +1,22 @@
+services:
+  ## Slack
+  TurboLabIt\Messengers\SlackMessenger:
+    autowire: true
+    public: true
+    arguments:
+      $arrConfig:
+        Slack:
+          enabled: '%env(APP_SLACK_ENABLED)%'
+          token: '%env(APP_SLACK_TOKEN)%'
+          channelId: '%env(APP_SLACK_CHANNEL_ID)%'
+
+  ## Telegram
+  TurboLabIt\Messengers\TelegramMessenger:
+    autowire: true
+    public: true
+    arguments:
+      $arrConfig:
+        Telegram:
+          enabled: '%env(APP_TELEGRAM_ENABLED)%'
+          token: '%env(APP_TELEGRAM_TOKEN)%'
+          channelId: '%env(APP_TELEGRAM_CHANNEL_ID)%'

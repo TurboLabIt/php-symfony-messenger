@@ -1,64 +1,47 @@
 <?php
-/**
- * @see https://github.com/TurboLabIt/php-symfony-messenger
- */
 namespace TurboLabIt\Messengers;
 
+use stdClass;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
-use Symfony\Component\HttpClient\Exception\ClientException;
-use Symfony\Component\HttpFoundation\Response;
 
-class SlackMessenger extends AbstractBaseMessenger
+class SlackMessenger extends BaseMessenger
 {
-    public function sendMessageToChannel(string $message,)
+    public function sendMessageToChannel(string $message) : stdClass
     {
-        return $this->makeRequest(
-            $this->arrConfig["Slack"]["endpoints"]["main"], [
-                'json' => [
-                    "text" => $message
-                ]
-            ]
-        );
+        $message = trim($message);
+
+        if( empty($message) ) {
+            throw new InvalidParameterException("SlackMessenger: message to send cannot be empty");
+        }
+
+        $arrParams = [
+            "channel"   => $this->arrConfig["Slack"]["channelId"],
+            "text"      => $message
+        ];
+
+        $oJson = $this->apiCall('https://slack.com/api/chat.postMessage', $arrParams);
+        return $oJson;
     }
 
 
-    public function sendErrorMessage(string $message)
+    protected function apiCall(string $endPoint, array $arrParams = [], string $method = Request::METHOD_POST, array $arrHeaders = []) : stdClass
     {
-        return $this->makeRequest(
-            $this->arrConfig["Slack"]["endpoints"]["errors"], [
-                'json' => [
-                    "text" => $message
-                ]
-            ]
-        );
-    }
-
-
-    protected function makeRequest(string $endpoint, array $arrParam, string $method = 'POST')
-    {
-        $disabled = array_key_exists("enabled", $this->arrConfig["Slack"]) && empty($this->arrConfig["Slack"]["enabled"]);
+        $disabled = array_key_exists("enabled", $this->arrConfig["Slack"]) && !$this->arrConfig["Slack"]["enabled"];
         if($disabled)  {
-            return false;
+            return (object)["enabled" => false];
         }
 
-        $arrErrors = [];
+        $arrHeaders = array_merge($arrHeaders, ["Authorization" => "Bearer " . $this->arrConfig["Slack"]["token"]]);
 
-        if( empty($endpoint) ) {
-            $arrErrors[] = "Slack endpoint is empty. Please set APP_SLACK_ENDPOINT and APP_SLACK_ENDPOINT_ERRORS | 📚 https://github.com/TurboLabIt/php-symfony-messenger";
-        }
+        $this->lastResponse = $this->httpClient->request($method, $endPoint, [
+            "headers"   => $arrHeaders,
+            "body"      => $arrParams
+        ]);
 
-        if( empty($arrParam) ) {
-            $arrErrors[] = "No Slack parameter provided | | 📚 https://github.com/TurboLabIt/php-symfony-messenger";
-        }
-
-        if( !empty($arrErrors) ) {
-            throw new \RuntimeException( implode(PHP_EOL, $arrErrors) );
-        }
-
-        $endpoint       = $this->prepareEndpoint($endpoint, true, false);
-        $this->response = $this->httpClient->request($method, $endpoint, $arrParam);
-        $txtResponse    = $this->response->getContent();
-
-        return $txtResponse;
+        $content = $this->lastResponse->getContent(false);
+        $oJson = json_decode($content);
+        return $oJson;
     }
 }
