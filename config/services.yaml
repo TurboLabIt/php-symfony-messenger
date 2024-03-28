@@ -9,6 +9,7 @@ services:
           enabled: '%env(APP_SLACK_ENABLED)%'
           token: '%env(APP_SLACK_TOKEN)%'
           channelId: '%env(APP_SLACK_CHANNEL_ID)%'
+          errorsChannelId: '%env(APP_SLACK_ERRORS_CHANNEL_ID)%'
 
   ## Telegram
   TurboLabIt\Messengers\TelegramMessenger:

@@ -3,7 +3,6 @@ namespace TurboLabIt\Messengers;
 
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 
 /**
@@ -12,6 +11,14 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 class TelegramMessenger extends BaseMessenger
 {
     const ENDPOINT = 'https://api.telegram.org/bot';
+    protected array $arrMessageButtons = [];
+
+
+    public function setMessageButtons(array $arrMessageButtons) : static
+    {
+        $this->arrMessageButtons = $arrMessageButtons;
+        return $this;
+    }
 
 
     protected function getEndPoint() : string
@@ -20,32 +27,41 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
-    public function sendMessageToChannel(string $message, array $arrButtons = []) : stdClass
+    public function sendMessageToChannel(string $message, array $arrParams = []) : stdClass
     {
-        $message = trim($message);
+        return $this->sendMessage($message, array_merge([
+            "chat_id" => $this->arrConfig["Telegram"]["channelId"],
+        ], $arrParams));
+    }
 
-        if( empty($message) ) {
-            throw new InvalidParameterException("TelegramMessenger: message to send cannot be empty");
-        }
 
-        $arrParams = [
-            "chat_id"                   => $this->arrConfig["Telegram"]["channelId"],
+    public function sendErrorMessage(string $message, array $arrParams = []) : stdClass
+    {
+        return $this->sendMessage($message, array_merge([
+            "chat_id" => $this->arrConfig["Telegram"]["errorsChannelId"],
+        ], $arrParams));
+    }
+
+
+    public function sendMessage(string $message, array $arrParams) : stdClass
+    {
+        // 📚 https://core.telegram.org/bots/api#sendmessage
+
+        $arrParams = array_merge_recursive([
             "text"                      => $message,
             "parse_mode"                => "HTML",
             "disable_web_page_preview"  => 0,
-            "disable_notification"      => 0,
-        ];
+            "disable_notification"      => 0
+        ], $arrParams);
 
-        if( !empty($arrButtons) ) {
+        if( !empty($this->arrMessageButtons) ) {
             $arrParams["reply_markup"] = json_encode([
-                "inline_keyboard" => [$arrButtons]
+                "inline_keyboard" => [$this->arrMessageButtons]
             ]);
         }
 
-        // 📚 https://core.telegram.org/bots/api#sendmessage
         $endPoint = $this->getEndPoint() . 'sendMessage';
-        $oJson = $this->apiCall($endPoint, $arrParams);
-        return $oJson;
+        return $this->apiCall($endPoint, $arrParams);
     }
 
 

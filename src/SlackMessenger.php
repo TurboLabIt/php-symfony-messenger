@@ -3,26 +3,31 @@ namespace TurboLabIt\Messengers;
 
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 
 class SlackMessenger extends BaseMessenger
 {
     public function sendMessageToChannel(string $message) : stdClass
     {
-        $message = trim($message);
+        return $this->sendMessage($message, [
+            "channel" => $this->arrConfig["Slack"]["channelId"],
+        ]);
+    }
 
-        if( empty($message) ) {
-            throw new InvalidParameterException("SlackMessenger: message to send cannot be empty");
-        }
 
-        $arrParams = [
-            "channel"   => $this->arrConfig["Slack"]["channelId"],
-            "text"      => $message
-        ];
+    public function sendErrorMessage(string $message) : stdClass
+    {
+        return $this->sendMessage($message, [
+            "channel" => $this->arrConfig["Slack"]["errorsChannelId"],
+        ]);
+    }
 
-        $oJson = $this->apiCall('https://slack.com/api/chat.postMessage', $arrParams);
-        return $oJson;
+
+    public function sendMessage(string $message, array $arrParams) : stdClass
+    {
+        return $this->apiCall('https://slack.com/api/chat.postMessage', array_merge($arrParams, [
+            "text" => trim($message)
+        ]));
     }
 
 
