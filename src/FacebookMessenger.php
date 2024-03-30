@@ -13,7 +13,7 @@ class FacebookMessenger extends BaseMessenger
     const ENDPOINT = 'https://graph.facebook.com/v19.0/';
 
 
-    public function sendMessageToPage(string $message, array $arrParams = []) : string
+    public function sendMessageToPage(?string $message, array $arrParams = []) : string
     {
         $endpoint   = static::ENDPOINT . $this->arrConfig["Facebook"]["page"]["id"] . "/feed";
         $arrParams  = array_merge([
@@ -28,6 +28,14 @@ class FacebookMessenger extends BaseMessenger
 
         // this is the ID of the new post
         return $result->id;
+    }
+
+
+    public function sendUrlToPage(string $url, array $arrParams = []) : string
+    {
+        return $this->sendMessageToPage(null, array_merge([
+            "link" => $url
+        ], $arrParams));
     }
 
 

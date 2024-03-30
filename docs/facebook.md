@@ -20,10 +20,16 @@ Submit and you'll get the `id` and `name` of the Page:
 1. copy [the variables](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/.env) to your local `.env` file.
 2. assign the token and page ID values to the variables
 
-You can now send a message with
+You can now post a message on the page with
 
 ````php
 $messenger->sendMessageToPage($messageText)`
+````
+
+Or share a URL:
+
+````php
+$messenger->sendUrlToPage('https://turbolab.it')`
 ````
 
 👉 [Check the example here](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/tests/FacebookTest.php)
