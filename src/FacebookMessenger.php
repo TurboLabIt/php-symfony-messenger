@@ -60,6 +60,10 @@ class FacebookMessenger extends BaseMessenger
             throw new FacebookException("JSON response decoding error");
         }
 
+        if( !empty($oJson->error) ) {
+            throw new FacebookException($oJson->error->message);
+        }
+
         return $oJson;
     }
 }
