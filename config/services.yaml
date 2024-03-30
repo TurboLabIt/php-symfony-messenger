@@ -21,3 +21,15 @@ services:
           enabled: '%env(APP_TELEGRAM_ENABLED)%'
           token: '%env(APP_TELEGRAM_TOKEN)%'
           channelId: '%env(APP_TELEGRAM_CHANNEL_ID)%'
+
+  ## Facebook
+  TurboLabIt\Messengers\FacebookMessenger:
+    autowire: true
+    public: true
+    arguments:
+        $arrConfig:
+            Facebook:
+                enabled: '%env(APP_FACEBOOK_ENABLED)%'
+                page:
+                  id: '%env(APP_FACEBOOK_PAGE_ID)%'
+                  token: '%env(APP_FACEBOOK_PAGE_TOKEN)%'

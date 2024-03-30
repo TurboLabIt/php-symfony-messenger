@@ -13,6 +13,7 @@ symfony composer require turbolabit/php-symfony-messenger:dev-main
 
 - [Slack](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/slack.md)
 - [Telegram](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/telegram.md)
+- [Facebook](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/facebook.md)
 
 
 ## 🔔 Get a notification on Command errors
