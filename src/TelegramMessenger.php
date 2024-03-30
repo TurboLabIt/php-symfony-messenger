@@ -73,7 +73,21 @@ class TelegramMessenger extends BaseMessenger
         ]);
 
         $content = $this->lastResponse->getContent(false);
+
+        if( empty($content) ) {
+            throw new TelegramException("Empty response from the Telegram endpoint");
+        }
+
         $oJson = json_decode($content);
+
+        if( empty($oJson) ) {
+            throw new TelegramException("JSON response decoding error");
+        }
+
+        if( ( $oJson->ok ?? false ) != true ) {
+            throw new TelegramException("the Telegram endpoint returned an error: " . ($oJson->description ?? '<no error>'));
+        }
+
         return $oJson;
     }
 }
