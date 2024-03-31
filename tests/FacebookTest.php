@@ -34,4 +34,13 @@ class FacebookTest extends BaseT
         $this->assertIsString($newPostId);
         $this->assertGreaterThanOrEqual( mb_strlen(static::SAMPLE_POST_ID), mb_strlen($newPostId));
     }
+
+
+    #[Depends('testInstance')]
+    public function testPageUrl(FacebookMessenger $messenger)
+    {
+        $pageUrl = $messenger->getPageUrl();
+        $this->assertStringStartsWith(FacebookMessenger::WEBURL, $pageUrl);
+        $this->assertNotEquals(FacebookMessenger::WEBURL, $pageUrl);
+    }
 }

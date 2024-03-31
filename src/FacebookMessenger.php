@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FacebookMessenger extends BaseMessenger
 {
-    const ENDPOINT = 'https://graph.facebook.com/v19.0/';
+    const ENDPOINT  = 'https://graph.facebook.com/v19.0/';
+    const WEBURL    = 'https://www.facebook.com/profile.php?id=';
 
 
     public function sendMessageToPage(?string $message, array $arrParams = []) : string
@@ -65,5 +66,11 @@ class FacebookMessenger extends BaseMessenger
         }
 
         return $oJson;
+    }
+
+
+    public function getPageUrl() : string
+    {
+        return static::WEBURL . $this->arrConfig["Facebook"]["page"]["id"];
     }
 }
