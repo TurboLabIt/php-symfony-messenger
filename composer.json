@@ -11,7 +11,8 @@
   ],
   "require": {
     "php": "^8",
-    "symfony/http-client": "@stable"
+    "symfony/http-client": "@stable",
+    "abraham/twitteroauth": "@stable"
   },
   "autoload": {
     "psr-4": {

@@ -33,3 +33,16 @@ services:
                 page:
                   id: '%env(APP_FACEBOOK_PAGE_ID)%'
                   token: '%env(APP_FACEBOOK_PAGE_TOKEN)%'
+
+  ## Twitter
+  TurboLabIt\Messengers\TwitterMessenger:
+    autowire: true
+    public: true
+    arguments:
+      $arrConfig:
+        Twitter:
+          enabled: '%env(APP_TWITTER_ENABLED)%'
+          apiKey: '%env(APP_TWITTER_API_KEY)%'
+          apiSecret: '%env(APP_TWITTER_API_SECRET)%'
+          accessToken: '%env(APP_TWITTER_ACCESS_TOKEN)%'
+          accessTokenSecret: '%env(APP_TWITTER_ACCESS_TOKEN_SECRET)%'
