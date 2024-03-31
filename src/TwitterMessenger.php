@@ -18,8 +18,6 @@ class TwitterMessenger extends BaseMessenger
 
         $this->twitterOAuth =
             new TwitterOAuth($oConfig->apiKey, $oConfig->apiSecret, $oConfig->accessToken, $oConfig->accessTokenSecret);
-
-        $this->twitterOAuth->setApiVersion('2');
     }
 
 
