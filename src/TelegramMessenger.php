@@ -90,4 +90,10 @@ class TelegramMessenger extends BaseMessenger
 
         return $oJson;
     }
+
+
+    public function getChannelUrl() : string
+    {
+        return "https://t.me/" . trim($this->arrConfig["Telegram"]["channelId"], '@');
+    }
 }
