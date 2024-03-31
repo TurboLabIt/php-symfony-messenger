@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TelegramMessenger extends BaseMessenger
 {
-    const ENDPOINT = 'https://api.telegram.org/bot';
+    const ENDPOINT  = 'https://api.telegram.org/bot';
+    const WEBURL    = 'https://t.me/s/';
+
     protected array $arrMessageButtons = [];
 
 
@@ -94,6 +96,6 @@ class TelegramMessenger extends BaseMessenger
 
     public function getChannelUrl() : string
     {
-        return "https://t.me/" . trim($this->arrConfig["Telegram"]["channelId"], '@');
+        return static::WEBURL . trim($this->arrConfig["Telegram"]["channelId"], '@');
     }
 }

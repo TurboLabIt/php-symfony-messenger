@@ -32,4 +32,13 @@ class TelegramTest extends BaseT
         $this->assertEquals(true, $result->ok);
         $this->assertEquals($messageText, $result->result->text);
     }
+
+
+    #[Depends('testInstance')]
+    public function testChannelUrl(TelegramMessenger $messenger)
+    {
+        $channelUrl = $messenger->getChannelUrl();
+        $this->assertStringStartsWith(TelegramMessenger::WEBURL, $channelUrl);
+        $this->assertNotEquals(TelegramMessenger::WEBURL, $channelUrl);
+    }
 }
