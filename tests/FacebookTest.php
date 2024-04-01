@@ -47,7 +47,7 @@ class FacebookTest extends BaseT
 
 
     #[Depends('testSendMessageToPage')]
-    public function testNewMessageUrl(string|int $newPostId)
+    public function testMessageUrl(string|int $newPostId)
     {
         $newMessageUrl = $this->getInstance()->buildMessageUrl($newPostId);
         $this->assertEquals("https://www.facebook.com/$newPostId", $newMessageUrl);
