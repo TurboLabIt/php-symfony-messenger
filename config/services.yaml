@@ -21,6 +21,7 @@ services:
           enabled: '%env(APP_TELEGRAM_ENABLED)%'
           token: '%env(APP_TELEGRAM_TOKEN)%'
           channelId: '%env(APP_TELEGRAM_CHANNEL_ID)%'
+          errorsChannelId: '%env(APP_TELEGRAM_ERRORS_CHANNEL_ID)%'
 
   ## Facebook
   TurboLabIt\Messengers\FacebookMessenger:
