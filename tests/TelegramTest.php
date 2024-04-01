@@ -13,12 +13,21 @@ class TelegramTest extends BaseT
 
 
     #[Depends('testInstance')]
+    public function testChannelUrl(TelegramMessenger $messenger)
+    {
+        $channelUrl = $messenger->getChannelUrl();
+        $this->assertStringStartsWith(TelegramMessenger::WEBURL, $channelUrl);
+        $this->assertNotEquals(TelegramMessenger::WEBURL, $channelUrl);
+    }
+
+
+    #[Depends('testInstance')]
     public function testSendMessageToChannel(TelegramMessenger $messenger)
     {
         $messageText = '📚 Come installare Symfony su Windows: la video-Guida Definitiva';
         $messageHtml = '<b><a href="https://turbolab.it/2561">' . $messageText . '</a></b>';
 
-        $result=
+        $result =
             $messenger
                 ->setMessageButtons([
                     [
@@ -31,14 +40,17 @@ class TelegramTest extends BaseT
         $this->assertInstanceOf('\stdClass', $result);
         $this->assertEquals(true, $result->ok);
         $this->assertEquals($messageText, $result->result->text);
+
+        return $result;
     }
 
 
-    #[Depends('testInstance')]
-    public function testChannelUrl(TelegramMessenger $messenger)
+    #[Depends('testSendMessageToChannel')]
+    public function testNewMessageUrl(\stdClass $oJsonResponse)
     {
-        $channelUrl = $messenger->getChannelUrl();
-        $this->assertStringStartsWith(TelegramMessenger::WEBURL, $channelUrl);
-        $this->assertNotEquals(TelegramMessenger::WEBURL, $channelUrl);
+        $newMessageUrl = $this->getInstance()->buildNewMessageUrl($oJsonResponse);
+        $this->assertStringStartsWith(TelegramMessenger::WEBURL, $newMessageUrl);
+        $this->assertNotEquals(TelegramMessenger::WEBURL, $newMessageUrl);
+        $this->assertStringEndsWith($oJsonResponse->result->message_id, $newMessageUrl);
     }
 }
