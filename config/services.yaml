@@ -42,6 +42,7 @@ services:
       $arrConfig:
         Twitter:
           enabled: '%env(APP_TWITTER_ENABLED)%'
+          id: '%env(APP_TWITTER_ID)%'
           apiKey: '%env(APP_TWITTER_API_KEY)%'
           apiSecret: '%env(APP_TWITTER_API_SECRET)%'
           accessToken: '%env(APP_TWITTER_ACCESS_TOKEN)%'

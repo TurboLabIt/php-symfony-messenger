@@ -14,6 +14,15 @@ class TwitterTest extends BaseT
 
 
     #[Depends('testInstance')]
+    public function testPageUrl(TwitterMessenger $messenger)
+    {
+        $pageUrl = $messenger->getPageUrl();
+        $this->assertStringStartsWith('https://twitter.com/', $pageUrl);
+        $this->assertNotEquals('https://twitter.com/', $pageUrl);
+    }
+
+
+    #[Depends('testInstance')]
     public function testSendMessageToPage(TwitterMessenger $messenger)
     {
         $messageText = '📚 Come installare Symfony su Windows: la video-Guida Definitiva https://turbolab.it/2561';
@@ -21,5 +30,16 @@ class TwitterTest extends BaseT
 
         $this->assertIsString($newPostId);
         $this->assertGreaterThanOrEqual( mb_strlen(static::SAMPLE_TWEET_ID), mb_strlen($newPostId));
+
+        return $newPostId;
+    }
+
+
+    #[Depends('testSendMessageToPage')]
+    public function testMessageUrl(string|int $newPostId)
+    {
+        $newMessageUrl = $this->getInstance()->buildMessageUrl($newPostId);
+        $this->assertStringStartsWith('https://twitter.com/', $newMessageUrl);
+        $this->assertStringEndsWith($newPostId, $newMessageUrl);
     }
 }

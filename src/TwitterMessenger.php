@@ -12,7 +12,7 @@ class TwitterMessenger extends BaseMessenger
     protected TwitterOAuth $twitterOAuth;
 
 
-    public function __construct(array $arrConfig)
+    public function __construct(protected array $arrConfig)
     {
         $oConfig = (object)$arrConfig["Twitter"];
 
@@ -36,5 +36,18 @@ class TwitterMessenger extends BaseMessenger
         }
 
         return $tweetId;
+    }
+
+
+    public function getPageUrl() : string
+    {
+        $handle = trim($this->arrConfig["Twitter"]["id"], '@');
+        return 'https://twitter.com/' . $handle;
+    }
+
+
+    public function buildMessageUrl(string|int $postId) : string
+    {
+        return $this->getPageUrl() . "/status/" . $postId;
     }
 }
