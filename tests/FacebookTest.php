@@ -14,6 +14,14 @@ class FacebookTest extends BaseT
 
 
     #[Depends('testInstance')]
+    public function testPageUrl(FacebookMessenger $messenger)
+    {
+        $pageUrl = $messenger->getPageUrl();
+        $this->assertNotEquals(FacebookMessenger::WEBURL, $pageUrl);
+    }
+
+
+    #[Depends('testInstance')]
     public function testSendMessageToPage(FacebookMessenger $messenger)
     {
         $messageText = '📚 Come installare Symfony su Windows: la video-Guida Definitiva';
@@ -23,6 +31,8 @@ class FacebookTest extends BaseT
 
         $this->assertIsString($newPostId);
         $this->assertGreaterThanOrEqual( mb_strlen(static::SAMPLE_POST_ID), mb_strlen($newPostId));
+
+        return $newPostId;
     }
 
 
@@ -36,11 +46,10 @@ class FacebookTest extends BaseT
     }
 
 
-    #[Depends('testInstance')]
-    public function testPageUrl(FacebookMessenger $messenger)
+    #[Depends('testSendMessageToPage')]
+    public function testNewMessageUrl(string|int $newPostId)
     {
-        $pageUrl = $messenger->getPageUrl();
-        $this->assertStringStartsWith(FacebookMessenger::WEBURL, $pageUrl);
-        $this->assertNotEquals(FacebookMessenger::WEBURL, $pageUrl);
+        $newMessageUrl = $this->getInstance()->buildMessageUrl($newPostId);
+        $this->assertEquals("https://www.facebook.com/$newPostId", $newMessageUrl);
     }
 }
