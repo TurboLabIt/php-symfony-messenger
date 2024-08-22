@@ -20,7 +20,7 @@ use TurboLabIt\Messengers\SlackMessenger;
 
 class CommandFailureListener
 {
-    public function __construct(protected SlackMessenger $slackMessenger)
+    public function __construct(protected SlackMessenger $messenger)
     { }
 
 
@@ -33,7 +33,7 @@ class CommandFailureListener
             "Command: *" . $event->getCommand()?->getName() . "*" . PHP_EOL .
             "Error: *" . $event->getError()->getMessage() . "*";
 
-        $this->slackMessenger->sendErrorMessage($text);
+        $this->messenger->sendErrorMessage($text);
     }
 }
 ````
