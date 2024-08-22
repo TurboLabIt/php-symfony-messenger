@@ -36,4 +36,5 @@ class CommandFailureListener
         $this->messenger->sendErrorMessage($text);
     }
 }
+
 ````
