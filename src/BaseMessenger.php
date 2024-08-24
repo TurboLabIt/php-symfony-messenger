@@ -12,7 +12,7 @@ abstract class BaseMessenger
 
     public function __construct(
         protected array $arrConfig, protected HttpClientInterface $httpClient,
-        protected ParameterBagInterface $parameters 
+        protected ParameterBagInterface $parameters
     ) {}
 
 
