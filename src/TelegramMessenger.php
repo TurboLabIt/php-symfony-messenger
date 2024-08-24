@@ -37,9 +37,10 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
-    public function sendErrorMessage(string $message, array $arrParams = []) : stdClass
+    public function sendErrorMessage(string $message, array $arrParams = [], ?string $emoji = '') : stdClass
     {
-        return $this->sendMessage($this->getEnv(true) . $message, array_merge([
+        $fullMessage = $this->getEnv(true) . '<b>🛑</b> ' . $message;
+        return $this->sendMessage($fullMessage, array_merge([
             "chat_id" => $this->arrConfig["Telegram"]["errorsChannelId"],
         ], $arrParams));
     }
