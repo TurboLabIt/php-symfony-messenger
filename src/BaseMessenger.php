@@ -14,4 +14,16 @@ abstract class BaseMessenger
         protected array $arrConfig, protected HttpClientInterface $httpClient,
         protected ParameterBagInterface $parameters 
     ) {}
+
+
+    protected function getEnvTag(bool $includeProd = false) : string
+    {
+        $env = $this->parameters->get("kernel.environment");
+        
+        if( $env == 'prod' && !$includeProd ) {
+            return '';
+        }
+        
+        return "[" . strtoupper($env) . "] ";
+    }
 }
