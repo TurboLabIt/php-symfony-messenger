@@ -31,7 +31,7 @@ class TelegramMessenger extends BaseMessenger
 
     public function sendMessageToChannel(string $message, array $arrParams = []) : stdClass
     {
-        return $this->sendMessage($message, array_merge([
+        return $this->sendMessage($this->getEnv() . $message, array_merge([
             "chat_id" => $this->arrConfig["Telegram"]["channelId"],
         ], $arrParams));
     }
@@ -39,7 +39,7 @@ class TelegramMessenger extends BaseMessenger
 
     public function sendErrorMessage(string $message, array $arrParams = []) : stdClass
     {
-        return $this->sendMessage($message, array_merge([
+        return $this->sendMessage($this->getEnv(true) . $message, array_merge([
             "chat_id" => $this->arrConfig["Telegram"]["errorsChannelId"],
         ], $arrParams));
     }
@@ -64,6 +64,18 @@ class TelegramMessenger extends BaseMessenger
 
         $endPoint = $this->getEndPoint() . 'sendMessage';
         return $this->apiCall($endPoint, $arrParams);
+    }
+
+    
+    protected function getEnvTag(bool $includeProd = false) : string
+    {
+        $envTag = parent::getEnvTag($includeProd);
+        $envTag = trim($envTag);
+        if( empty($envTag) ) {
+            return $envTag;
+        }
+
+        return "<b>{$envTag}</b> ";
     }
 
 
