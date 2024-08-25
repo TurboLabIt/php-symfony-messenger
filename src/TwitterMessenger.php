@@ -9,13 +9,14 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  */
 class TwitterMessenger extends BaseMessenger
 {
+    const SERVICE_NAME = self::SERVICE_TWITTER;
+    
     protected TwitterOAuth $twitterOAuth;
 
 
     public function __construct(protected array $arrConfig)
     {
         $oConfig = (object)$arrConfig["Twitter"];
-
         $this->twitterOAuth =
             new TwitterOAuth($oConfig->apiKey, $oConfig->apiSecret, $oConfig->accessToken, $oConfig->accessTokenSecret);
     }
