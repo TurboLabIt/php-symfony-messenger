@@ -8,8 +8,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 abstract class BaseMessenger
 {
+    const SERVICE_TELEGRAM  = 'telegram';
+    const SERVICE_FACEBOOK  = 'facebook';
+    const SERVICE_TWITTER   = 'twitter';
+    const SERVICE_X         = 'x';
+    
     protected ?ResponseInterface $lastResponse = null;
 
+    
     public function __construct(
         protected array $arrConfig, protected HttpClientInterface $httpClient,
         protected ParameterBagInterface $parameters
