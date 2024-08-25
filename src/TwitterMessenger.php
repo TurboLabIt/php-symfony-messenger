@@ -23,7 +23,11 @@ class TwitterMessenger extends BaseMessenger
 
     public function sendMessage(?string $message) : string
     {
-        $oJson      = $this->twitterOAuth->post("tweets", ["text" => $message]);
+        $oJson =
+            $this->twitterOAuth->post("tweets", [
+                "text" => $this->messageEncoder($message)
+            ]);
+
         $httpStatus = $this->twitterOAuth->getLastHttpCode();
 
         if( $httpStatus < 200 || $httpStatus > 299 ) {
@@ -47,7 +51,5 @@ class TwitterMessenger extends BaseMessenger
 
 
     public function buildMessageUrl(string|int $postId) : string
-    {
-        return $this->getPageUrl() . "/status/" . $postId;
-    }
+        { return $this->getPageUrl() . "/status/" . $postId; }
 }
