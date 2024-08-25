@@ -37,12 +37,31 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
-    public function sendErrorMessage(string $message, array $arrParams = [], ?string $emoji = '') : stdClass
+    public function sendErrorMessage(string $message, array $arrParams = [], ?string $emoji = '🛑') : stdClass
     {
-        $fullMessage = $this->getEnvTag(true) . '<b>🛑</b> ' . $message;
+        $fullMessage = $this->getEnvTag(true);
+
+        if( !empty($emoji) ) {
+            $fullMessage .= "$emoji ";
+        }
+
+        $fullMessage .= $message;
+
         return $this->sendMessage($fullMessage, array_merge([
             "chat_id" => $this->arrConfig["Telegram"]["errorsChannelId"],
         ], $arrParams));
+    }
+
+
+    protected function getEnvTag(bool $includeProd = false) : string
+    {
+        $envTag = parent::getEnvTag($includeProd);
+        $envTag = trim($envTag);
+        if( empty($envTag) ) {
+            return $envTag;
+        }
+
+        return "<b>{$envTag}</b> ";
     }
 
 
@@ -51,7 +70,7 @@ class TelegramMessenger extends BaseMessenger
         // 📚 https://core.telegram.org/bots/api#sendmessage
 
         $arrParams = array_merge_recursive([
-            "text"                      => $message,
+            "text"                      => $this->messageEncoding($message),
             "parse_mode"                => "HTML",
             "disable_web_page_preview"  => 0,
             "disable_notification"      => 0
@@ -67,16 +86,44 @@ class TelegramMessenger extends BaseMessenger
         return $this->apiCall($endPoint, $arrParams);
     }
 
-    
-    protected function getEnvTag(bool $includeProd = false) : string
+
+    protected function messageEncoding(string $message) : string
     {
-        $envTag = parent::getEnvTag($includeProd);
-        $envTag = trim($envTag);
-        if( empty($envTag) ) {
-            return $envTag;
+        /**
+         * this function handles an issue with some entities, as &apos;
+         * which are shown as-they-are on delivered messages
+         * 📚 https://core.telegram.org/bots/api#formatting-options
+         * 
+         * All <, > and & symbols that are not a part of a tag or an HTML entity
+         * must be replaced with the corresponding HTML entities 
+         * (< with &lt;, > with &gt; and & with &amp;).
+         * 
+         * The API currently supports only the following named HTML entities: 
+         * &lt;, &gt;, &amp; and &quot;.
+         */
+
+        $arrEntitiesToProtect = [
+            '&lt;'      => 'LT',
+            '&gt;'      => 'GT',
+            '&amp;'     => 'AMP',
+            '&quot;'    => 'QUOT',
+        ];
+
+        $protectorString = uniqid();
+
+        foreach($arrEntitiesToProtect as &$val) {
+            $val = "{$protectorString}_{$val}_{$protectorString}";
         }
 
-        return "<b>{$envTag}</b> ";
+        $protectedMessage =
+            str_ireplace(array_keys($arrEntitiesToProtect), $arrEntitiesToProtect, $message);
+
+        $encodedProtectedMessage = html_entity_decode($protectedMessage, ENT_QUOTES | ENT_HTML5, "UTF-8");
+        
+        $finalMessage =
+            str_ireplace($arrEntitiesToProtect, array_keys($arrEntitiesToProtect), $encodedProtectedMessage);
+
+        return $finalMessage;
     }
 
 
