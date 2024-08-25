@@ -1,7 +1,4 @@
 <?php
 namespace TurboLabIt\Messengers;
 
-class TwitterException extends BaseException
-{
-
-}
+class TwitterException extends BaseException {}
