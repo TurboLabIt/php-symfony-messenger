@@ -26,4 +26,13 @@ abstract class BaseMessenger
         
         return "[" . strtoupper($env) . "] ";
     }
+
+
+    protected function messageEncoder(string $message) : string
+    {
+        $finalMessage =
+            html_entity_decode($message, ENT_QUOTES | ENT_HTML5, "UTF-8");
+
+        return $finalMessage;
+    }
 }
