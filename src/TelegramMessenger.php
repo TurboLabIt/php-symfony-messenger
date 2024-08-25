@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TelegramMessenger extends BaseMessenger
 {
-    const ENDPOINT  = 'https://api.telegram.org/bot';
-    const WEBURL    = 'https://t.me/';
+    const SERVICE_NAME  = self::SERVICE_TELEGRAM;
+    const ENDPOINT      = 'https://api.telegram.org/bot';
+    const WEBURL        = 'https://t.me/';
 
     protected array $arrMessageButtons = [];
 
