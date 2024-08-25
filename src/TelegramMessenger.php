@@ -70,7 +70,7 @@ class TelegramMessenger extends BaseMessenger
         // 📚 https://core.telegram.org/bots/api#sendmessage
 
         $arrParams = array_merge_recursive([
-            "text"                      => $this->messageEncoding($message),
+            "text"                      => $this->messageEncoder($message),
             "parse_mode"                => "HTML",
             "disable_web_page_preview"  => 0,
             "disable_notification"      => 0
@@ -87,7 +87,7 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
-    protected function messageEncoding(string $message) : string
+    protected function messageEncoder(string $message) : string
     {
         /**
          * this function handles an issue with some entities, as &apos;
