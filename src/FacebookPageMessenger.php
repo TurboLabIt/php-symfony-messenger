@@ -6,17 +6,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * 📚 https://developers.facebook.com/docs/pages-api/posts/
+ * 📚 https://developers.facebook.com/docs/pages-api/getting-started
  */
-class FacebookMessenger extends BaseMessenger
+class FacebookPageMessenger extends BaseMessenger
 {
-    const ENDPOINT  = 'https://graph.facebook.com/v19.0/';
+    const ENDPOINT  = 'https://graph.facebook.com/v20.0/##PAGE-ID##/feed';
     const WEBURL    = 'https://www.facebook.com/##PAGE-ID##/posts/';
 
 
-    public function sendMessageToPage(?string $message, array $arrParams = []) : string
+    public function sendMessage(?string $message, array $arrParams = []) : string
     {
-        $endpoint   = static::ENDPOINT . $this->arrConfig["Facebook"]["page"]["id"] . "/feed";
+        $endpoint   = str_replace('##PAGE-ID##', $this->arrConfig["Facebook"]["page"]["id"], static::ENDPOINT);
         $arrParams  = array_merge([
             "message"       => $message,
             "access_token"  => $this->arrConfig["Facebook"]["page"]["token"]
@@ -32,21 +32,22 @@ class FacebookMessenger extends BaseMessenger
     }
 
 
-    public function sendUrlToPage(string $url, array $arrParams = []) : string
+    public function sendUrl(string $url, array $arrParams = []) : string
     {
-        return $this->sendMessageToPage(null, array_merge([
-            "link" => $url
-        ], $arrParams));
+        return
+            $this->sendMessageToPage(null, array_merge([
+                "link" => $url
+            ], $arrParams));
     }
 
 
     protected function apiCall(string $endPoint, array $arrParam, string $method = Request::METHOD_POST, array $arrHeaders = []) : stdClass
     {
         $this->lastResponse = $this->httpClient->request($method, $endPoint, [
-            "headers"   => array_merge([
-                "Content-Type"  => "application/json"
+            "headers" => array_merge([
+                "Content-Type" => "application/json"
             ], $arrHeaders),
-            "query"     => $arrParam
+            "query" => $arrParam
         ]);
 
         $content = $this->lastResponse->getContent(false);
@@ -70,14 +71,7 @@ class FacebookMessenger extends BaseMessenger
 
 
     public function getPageUrl() : string
-    {
-        $url = str_ireplace('##PAGE-ID##', $this->arrConfig["Facebook"]["page"]["id"], static::WEBURL);
-        return $url;
-    }
+        { return str_ireplace('##PAGE-ID##', $this->arrConfig["Facebook"]["page"]["id"], static::WEBURL); }
 
-
-    public function buildMessageUrl(string|int $postId) : string
-    {
-        return "https://www.facebook.com/$postId";
-    }
+    public function buildMessageUrl(string|int $postId) : string { return "https://www.facebook.com/$postId"; }
 }

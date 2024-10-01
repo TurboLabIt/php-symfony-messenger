@@ -24,7 +24,7 @@ services:
           errorsChannelId: '%env(APP_TELEGRAM_ERRORS_CHANNEL_ID)%'
 
   ## Facebook
-  TurboLabIt\Messengers\FacebookMessenger:
+  TurboLabIt\Messengers\FacebookPageMessenger:
     autowire: true
     public: true
     arguments:
