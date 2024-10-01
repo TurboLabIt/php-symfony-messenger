@@ -1,7 +1,4 @@
 <?php
 namespace TurboLabIt\Messengers;
 
-class BaseException extends \Exception
-{
-
-}
+class BaseException extends \Exception {}

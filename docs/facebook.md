@@ -1,5 +1,7 @@
 # Post a message to a page
 
+📚 [Facebook Pages API](https://developers.facebook.com/docs/pages-api)
+
 1. register on [developers.facebook.com](https://developers.facebook.com)
 2. [create an app](https://developers.facebook.com/apps/creation/): choose `Other` -> `Business`, don't link any "Business portfolio"
 3. 🏁 as soon as you reach `Add products to your app`, the app is ready

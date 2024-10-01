@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FacebookPageMessenger extends BaseMessenger
 {
-    const ENDPOINT  = 'https://graph.facebook.com/v20.0/##PAGE-ID##/feed';
-    const WEBURL    = 'https://www.facebook.com/##PAGE-ID##/posts/';
+    const SERVICE_NAME  = self::SERVICE_FACEBOOK;
+    const ENDPOINT      = 'https://graph.facebook.com/v20.0/##PAGE-ID##/feed';
+    const WEBURL        = 'https://www.facebook.com/##PAGE-ID##/posts/';
 
 
     public function sendMessage(?string $message, array $arrParams = []) : string
