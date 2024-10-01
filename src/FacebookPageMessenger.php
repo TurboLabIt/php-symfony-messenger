@@ -36,7 +36,7 @@ class FacebookPageMessenger extends BaseMessenger
     public function sendUrl(string $url, array $arrParams = []) : string
     {
         return
-            $this->sendMessageToPage(null, array_merge([
+            $this->sendMessage(null, array_merge([
                 "link" => $url
             ], $arrParams));
     }
