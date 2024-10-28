@@ -1,7 +1,12 @@
 services:
-  TurboLabIt\MessengersBundle\Controller\LinkedInController:
-    autowire: true
+
+  ## Controllers
+  TurboLabIt\MessengersBundle\Controller\:
     public: true
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Controller/'
+    tags: [ 'controller.service_arguments' ]
 
   ## Slack
   TurboLabIt\MessengersBundle\SlackMessenger:

@@ -44,8 +44,12 @@ abstract class BaseMessenger
     protected function getVarDirPath(?string $filename = null) : string
     {
         $varDirFilePath =
-            $this->parameters->get('kernel.project_dir') . DIRECTORY_SEPARATOR .
+            $this->parameters->get('kernel.project_dir') . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR .
             static::VAR_DIR_NAME . DIRECTORY_SEPARATOR;
+
+        if( !is_dir($varDirFilePath) ) {
+            mkdir($varDirFilePath, 0775);
+        }
 
         if( empty($filename) ) {
             return $varDirFilePath;
