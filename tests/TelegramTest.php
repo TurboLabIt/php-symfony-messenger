@@ -1,13 +1,13 @@
 <?php
-namespace TurboLabIt\Messengers\Tests;
+namespace TurboLabIt\MessengersBundle\Tests;
 
 use PHPUnit\Framework\Attributes\Depends;
-use TurboLabIt\Messengers\TelegramMessenger;
+use TurboLabIt\MessengersBundle\TelegramMessenger;
 
 
 class TelegramTest extends BaseT
 {
-    const TESTED_SERVICE_FQN = 'TurboLabIt\Messengers\TelegramMessenger';
+    const TESTED_SERVICE_FQN = 'TurboLabIt\MessengersBundle\TelegramMessenger';
 
     public function testInstance() : TelegramMessenger { return $this->getInstance(); }
 

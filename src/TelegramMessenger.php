@@ -1,5 +1,5 @@
 <?php
-namespace TurboLabIt\Messengers;
+namespace TurboLabIt\MessengersBundle;
 
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +40,10 @@ class TelegramMessenger extends BaseMessenger
 
     public function sendErrorMessage(string $message, array $arrParams = [], ?string $emoji = '🛑') : stdClass
     {
+        if( empty($this->arrConfig["Telegram"]["enabled"]) || empty($this->arrConfig["Telegram"]["errorsChannelId"]) ) {
+            return new stdClass();
+        }
+
         $fullMessage = $this->getEnvTag(true);
 
         if( !empty($emoji) ) {
@@ -94,12 +98,12 @@ class TelegramMessenger extends BaseMessenger
          * this function handles an issue with some entities, as &apos;
          * which are shown as-they-are on delivered messages
          * 📚 https://core.telegram.org/bots/api#formatting-options
-         * 
+         *
          * All <, > and & symbols that are not a part of a tag or an HTML entity
-         * must be replaced with the corresponding HTML entities 
+         * must be replaced with the corresponding HTML entities
          * (< with &lt;, > with &gt; and & with &amp;).
-         * 
-         * The API currently supports only the following named HTML entities: 
+         *
+         * The API currently supports only the following named HTML entities:
          * &lt;, &gt;, &amp; and &quot;.
          */
 
@@ -120,7 +124,7 @@ class TelegramMessenger extends BaseMessenger
             str_ireplace(array_keys($arrEntitiesToProtect), $arrEntitiesToProtect, $message);
 
         $encodedProtectedMessage = html_entity_decode($protectedMessage, ENT_QUOTES | ENT_HTML5, "UTF-8");
-        
+
         $finalMessage =
             str_ireplace($arrEntitiesToProtect, array_keys($arrEntitiesToProtect), $encodedProtectedMessage);
 

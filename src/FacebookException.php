@@ -1,4 +1,4 @@
 <?php
-namespace TurboLabIt\Messengers;
+namespace TurboLabIt\MessengersBundle;
 
 class FacebookException extends BaseException {}

@@ -1,5 +1,5 @@
 <?php
-namespace TurboLabIt\Messengers\Tests;
+namespace TurboLabIt\MessengersBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -57,7 +57,7 @@ abstract class BaseT extends TestCase
 
 //<editor-fold defaultstate="collapsed" desc="*** SYMFONY KERNEL ***">
 use Symfony\Component\HttpKernel\Kernel;
-use TurboLabIt\Messengers\TurboLabItMessengersBundle;
+use TurboLabIt\MessengersBundle\TurboLabItMessengersBundle;
 
 class KernelT extends Kernel
 {

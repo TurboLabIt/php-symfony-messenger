@@ -1,5 +1,5 @@
 <?php
-namespace TurboLabIt\Messengers;
+namespace TurboLabIt\MessengersBundle;
 
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

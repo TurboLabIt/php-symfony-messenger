@@ -16,12 +16,12 @@
   },
   "autoload": {
     "psr-4": {
-      "TurboLabIt\\Messengers\\": "src/"
+      "TurboLabIt\\MessengersBundle\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "TurboLabIt\\Messengers\\Tests\\": "tests/"
+      "TurboLabIt\\MessengersBundle\\Tests\\": "tests/"
     }
   },
   "require-dev": {

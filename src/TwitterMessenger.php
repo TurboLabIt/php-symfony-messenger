@@ -1,5 +1,5 @@
 <?php
-namespace TurboLabIt\Messengers;
+namespace TurboLabIt\MessengersBundle;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 
@@ -10,7 +10,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 class TwitterMessenger extends BaseMessenger
 {
     const SERVICE_NAME = self::SERVICE_TWITTER;
-    
+
     protected TwitterOAuth $twitterOAuth;
 
 

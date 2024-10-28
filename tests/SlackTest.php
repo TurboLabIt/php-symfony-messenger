@@ -1,13 +1,13 @@
 <?php
-namespace TurboLabIt\Messengers\Tests;
+namespace TurboLabIt\MessengersBundle\Tests;
 
 use PHPUnit\Framework\Attributes\Depends;
-use TurboLabIt\Messengers\SlackMessenger;
+use TurboLabIt\MessengersBundle\SlackMessenger;
 
 
 class SlackTest extends BaseT
 {
-    const TESTED_SERVICE_FQN = 'TurboLabIt\Messengers\SlackMessenger';
+    const TESTED_SERVICE_FQN = 'TurboLabIt\MessengersBundle\SlackMessenger';
 
     public function testInstance() : SlackMessenger { return $this->getInstance(); }
 

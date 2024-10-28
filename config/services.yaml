@@ -1,6 +1,10 @@
 services:
+  TurboLabIt\MessengersBundle\Controller\LinkedInController:
+    autowire: true
+    public: true
+
   ## Slack
-  TurboLabIt\Messengers\SlackMessenger:
+  TurboLabIt\MessengersBundle\SlackMessenger:
     autowire: true
     public: true
     arguments:
@@ -12,7 +16,7 @@ services:
           errorsChannelId: '%env(APP_SLACK_ERRORS_CHANNEL_ID)%'
 
   ## Telegram
-  TurboLabIt\Messengers\TelegramMessenger:
+  TurboLabIt\MessengersBundle\TelegramMessenger:
     autowire: true
     public: true
     arguments:
@@ -24,7 +28,7 @@ services:
           errorsChannelId: '%env(APP_TELEGRAM_ERRORS_CHANNEL_ID)%'
 
   ## Facebook
-  TurboLabIt\Messengers\FacebookPageMessenger:
+  TurboLabIt\MessengersBundle\FacebookPageMessenger:
     autowire: true
     public: true
     arguments:
@@ -36,7 +40,7 @@ services:
                   token: '%env(APP_FACEBOOK_PAGE_TOKEN)%'
 
   ## Twitter
-  TurboLabIt\Messengers\TwitterMessenger:
+  TurboLabIt\MessengersBundle\TwitterMessenger:
     autowire: true
     public: true
     arguments:
@@ -48,3 +52,14 @@ services:
           apiSecret: '%env(APP_TWITTER_API_SECRET)%'
           accessToken: '%env(APP_TWITTER_ACCESS_TOKEN)%'
           accessTokenSecret: '%env(APP_TWITTER_ACCESS_TOKEN_SECRET)%'
+
+  ## LinkedIn
+  TurboLabIt\MessengersBundle\LinkedInPageMessenger:
+    autowire: true
+    public: true
+    arguments:
+      $arrConfig:
+        LinkedIn:
+          enabled: '%env(APP_LINKEDIN_ENABLED)%'
+          clientId: '%env(APP_LINKEDIN_CLIENT_ID)%'
+          clientSecret: '%env(APP_LINKEDIN_CLIENT_SECRET)%'

@@ -1,5 +1,5 @@
 <?php
-namespace TurboLabIt\Messengers;
+namespace TurboLabIt\MessengersBundle;
 
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;

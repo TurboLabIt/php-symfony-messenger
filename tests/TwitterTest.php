@@ -1,13 +1,13 @@
 <?php
-namespace TurboLabIt\Messengers\Tests;
+namespace TurboLabIt\MessengersBundle\Tests;
 
 use PHPUnit\Framework\Attributes\Depends;
-use TurboLabIt\Messengers\TwitterMessenger;
+use TurboLabIt\MessengersBundle\TwitterMessenger;
 
 
 class TwitterTest extends BaseT
 {
-    const TESTED_SERVICE_FQN    = 'TurboLabIt\Messengers\TwitterMessenger';
+    const TESTED_SERVICE_FQN    = 'TurboLabIt\MessengersBundle\TwitterMessenger';
     const SAMPLE_TWEET_ID       = '1774480562780041652';
 
     public function testInstance() : TwitterMessenger { return $this->getInstance(); }

@@ -1,13 +1,13 @@
 <?php
-namespace TurboLabIt\Messengers\Tests;
+namespace TurboLabIt\MessengersBundle\Tests;
 
 use PHPUnit\Framework\Attributes\Depends;
-use TurboLabIt\Messengers\FacebookMessenger;
+use TurboLabIt\MessengersBundle\FacebookMessenger;
 
 
 class FacebookTest extends BaseT
 {
-    const TESTED_SERVICE_FQN    = 'TurboLabIt\Messengers\FacebookMessenger';
+    const TESTED_SERVICE_FQN    = 'TurboLabIt\MessengersBundle\FacebookMessenger';
     const SAMPLE_POST_ID        = '101440452292345_439921855229876';
 
     public function testInstance() : FacebookMessenger { return $this->getInstance(); }
