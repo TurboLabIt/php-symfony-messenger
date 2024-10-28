@@ -2,6 +2,7 @@
 namespace TurboLabIt\MessengersBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -14,12 +15,26 @@ class LinkedInController extends AbstractController
 {
     const ROUTE_PATH = '/setup/linkedin/auth/';
 
-    public function __construct(protected LinkedInPageMessenger $messenger, protected UrlGeneratorInterface $urlGenerator)
+    public function __construct(
+        protected LinkedInPageMessenger $messenger, protected UrlGeneratorInterface $urlGenerator,
+        protected Security $security
+    )
     {}
+
+
+    protected function enforceAuthorization() : void
+    {
+        if( !$this->security->isGranted('ROLE_ADMIN') ) {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
 
     #[Route(self::ROUTE_PATH, name: 'turbolabit_messengers_linkedin_auth_start')]
     public function linkedInAuth() : Response
     {
+        $this->enforceAuthorization();
+
         $returnToUrl = $this->getCodeReturnToUrl();
         $linkedInAuthUrl = $this->messenger->getAuthCodeUrl($returnToUrl);
         return new Response('<a href="' . $linkedInAuthUrl . '">Start LinkedIn auth</a>');
@@ -39,6 +54,8 @@ class LinkedInController extends AbstractController
     #[Route(self::ROUTE_PATH . 'code-return-to/', name: 'turbolabit_messengers_linkedin_auth_code-return-to')]
     public function linkedAuthCodeReturnTo(Request $request) : Response
     {
+        $this->enforceAuthorization();
+
         $code = $request->get('code');
         if( empty($code) ) {
             throw new BadRequestHttpException('Invalid LinkedIn code');
