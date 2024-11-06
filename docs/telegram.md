@@ -1,3 +1,5 @@
+📚 https://core.telegram.org/bots/api#making-requests
+
 ## 🤖 1. Manage the Bot
 
 1. [Interact with BotFather](https://telegram.me/BotFather) to create a new bot
