@@ -44,16 +44,21 @@ From the `Auth` tab, get your API credentials (`Client ID` and `Primary Client S
 Set the [corresponding parameters](https://github.com/TurboLabIt/php-symfony-messenger/blob/main/.env) in your own `.env`.
 
 
-## 👮 7. Authorize the app
+## 🐑 7. Copy the routes yaml file
+
+Copy `config/routes/turbolabit_messengers.yaml` to your own Symfony project.
+
+
+## 👮 8. Authorize the app
 
 Open `https://example.com/setup/linkedin/auth/` and follow the authorization flow.
 
 You MUST use the LinkedIn account of an administrator of the company page connected to your app.
 
 
-## 🚀 8. Post!
+## 🚀 9. Post!
 
-You can now share an URL on the page with
+You can now share a URL on the page with
 
 ````php
 $messenger->sendUrl('https://turbolab.it')`
