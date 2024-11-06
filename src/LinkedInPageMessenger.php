@@ -17,7 +17,7 @@ class LinkedInPageMessenger extends BaseMessenger
     protected array $arrPermissions = ["w_organization_social"];
 
 
-    public function getOAuthRequiredRoles() : array { return  $this->arrConfig["oAuthRequiredRoles"]; }
+    public function getOAuthRequiredRoles() : array { return  $this->arrConfig["LinkedIn"]["oAuthRequiredRoles"]; }
 
 
     public function getAuthCodeUrl(string $returnToUrl) : string
