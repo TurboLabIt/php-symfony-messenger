@@ -2,10 +2,11 @@
 namespace TurboLabIt\MessengersBundle;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 
 /**
- * 📚 https://twitteroauth.com/
+ * 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/twitter.md
  */
 class TwitterMessenger extends BaseMessenger
 {
@@ -14,16 +15,22 @@ class TwitterMessenger extends BaseMessenger
     protected TwitterOAuth $twitterOAuth;
 
 
-    public function __construct(protected array $arrConfig)
+    public function __construct(protected array $arrConfig, protected ParameterBagInterface $parameters)
     {
         $oConfig = (object)$arrConfig["Twitter"];
-        $this->twitterOAuth =
-            new TwitterOAuth($oConfig->apiKey, $oConfig->apiSecret, $oConfig->accessToken, $oConfig->accessTokenSecret);
+        $this->twitterOAuth = new TwitterOAuth(
+            $oConfig->apiKey, $oConfig->apiSecret, $oConfig->accessToken, $oConfig->accessTokenSecret
+        );
     }
 
 
     public function sendMessage(?string $message) : string
     {
+        $tag = $this->getEnvTag();
+        if( !empty($tag) ) {
+            $message = "$tag $message";
+        }
+
         $oJson =
             $this->twitterOAuth->post("tweets", [
                 "text" => $this->messageEncoder($message)

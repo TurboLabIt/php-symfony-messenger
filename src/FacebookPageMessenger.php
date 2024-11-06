@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * 📚 https://developers.facebook.com/docs/pages-api/getting-started
+ * 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/facebook.md
  */
 class FacebookPageMessenger extends BaseMessenger
 {

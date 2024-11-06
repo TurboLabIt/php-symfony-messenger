@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * 📚 https://core.telegram.org/bots/api#making-requests
+ * 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/telegram.md
  */
 class TelegramMessenger extends BaseMessenger
 {
@@ -120,13 +120,9 @@ class TelegramMessenger extends BaseMessenger
             $val = "{$protectorString}_{$val}_{$protectorString}";
         }
 
-        $protectedMessage =
-            str_ireplace(array_keys($arrEntitiesToProtect), $arrEntitiesToProtect, $message);
-
-        $encodedProtectedMessage = html_entity_decode($protectedMessage, ENT_QUOTES | ENT_HTML5, "UTF-8");
-
-        $finalMessage =
-            str_ireplace($arrEntitiesToProtect, array_keys($arrEntitiesToProtect), $encodedProtectedMessage);
+        $protectedMessage = str_ireplace(array_keys($arrEntitiesToProtect), $arrEntitiesToProtect, $message);
+        $encodedProtectedMessage = $this->messageEncoder($protectedMessage);
+        $finalMessage = str_ireplace($arrEntitiesToProtect, array_keys($arrEntitiesToProtect), $encodedProtectedMessage);
 
         return $finalMessage;
     }

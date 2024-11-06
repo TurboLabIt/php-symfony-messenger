@@ -1,0 +1,4 @@
+## 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/linkedin.md
+turbolabit_messengers_routes:
+    resource: '@TurboLabItMessengersBundle/src/Controller/'
+    type: attribute

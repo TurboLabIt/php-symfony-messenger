@@ -12,6 +12,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use TurboLabIt\MessengersBundle\LinkedInPageMessenger;
 
 
+/**
+ * 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/linkedin.md
+ */
 class LinkedInController extends AbstractController
 {
     const ROUTE_PATH = '/setup/linkedin/auth/';
@@ -19,16 +22,7 @@ class LinkedInController extends AbstractController
     public function __construct(
         protected LinkedInPageMessenger $messenger, protected UrlGeneratorInterface $urlGenerator,
         protected Security $security
-    )
-    {}
-
-
-    protected function enforceAuthorization() : void
-    {
-        if( !$this->security->isGranted('ROLE_ADMIN') ) {
-            throw new AccessDeniedHttpException();
-        }
-    }
+    ) {}
 
 
     #[Route(self::ROUTE_PATH, name: 'turbolabit_messengers_linkedin_auth_start')]
@@ -58,16 +52,33 @@ class LinkedInController extends AbstractController
         $this->enforceAuthorization();
 
         $code = $request->get('code');
+
         if( empty($code) ) {
             throw new BadRequestHttpException('Invalid LinkedIn code');
         }
 
         $returnToUrl = $this->getCodeReturnToUrl();
 
-        $this->messenger
-            ->storeAuthCode($code, $returnToUrl)
-            ->exchangeAuthCodeForToken($code, $returnToUrl);
+        $this->messenger->exchangeAuthCodeForToken($code, $returnToUrl);
 
         return new Response('DONE');
+    }
+
+
+    protected function enforceAuthorization() : void
+    {
+        $arrRequiredRoles = $this->messenger->getOAuthRequiredRoles();
+
+        if( empty($arrRequiredRoles) ) {
+            return;
+        }
+
+        foreach($arrRequiredRoles as $role) {
+            if( $this->security->isGranted($role) ) {
+                return;
+            }
+        }
+
+        throw new AccessDeniedHttpException();
     }
 }

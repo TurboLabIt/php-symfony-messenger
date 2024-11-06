@@ -66,5 +66,7 @@ services:
       $arrConfig:
         LinkedIn:
           enabled: '%env(APP_LINKEDIN_ENABLED)%'
+          oAuthRequiredRoles: '%env(csv:APP_LINKEDIN_OAUTH_REQUIRED_ROLES)%'
           clientId: '%env(APP_LINKEDIN_CLIENT_ID)%'
           clientSecret: '%env(APP_LINKEDIN_CLIENT_SECRET)%'
+          organizationId: '%env(APP_LINKEDIN_ORGANIZATION_ID)%'

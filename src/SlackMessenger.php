@@ -5,6 +5,9 @@ use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
 
+/**
+ * 📚 https://github.com/TurboLabIt/php-symfony-messenger/blob/main/docs/slack.md
+ */
 class SlackMessenger extends BaseMessenger
 {
     public function sendMessageToChannel(string $message) : stdClass
