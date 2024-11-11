@@ -121,7 +121,7 @@ class TelegramMessenger extends BaseMessenger
         }
 
         $protectedMessage = str_ireplace(array_keys($arrEntitiesToProtect), $arrEntitiesToProtect, $message);
-        $encodedProtectedMessage = $this->messageEncoder($protectedMessage);
+        $encodedProtectedMessage = parent::messageEncoder($protectedMessage);
         $finalMessage = str_ireplace($arrEntitiesToProtect, array_keys($arrEntitiesToProtect), $encodedProtectedMessage);
 
         return $finalMessage;
