@@ -2,6 +2,7 @@
 namespace TurboLabIt\MessengersBundle;
 
 use Symfony\Component\HttpFoundation\Response;
+use TurboLabIt\MessengersBundle\Controller\LinkedInController;
 
 
 /**
@@ -151,7 +152,15 @@ class LinkedInPageMessenger extends BaseMessenger
         $httpStatusCode = $this->lastResponse->getStatusCode();
 
         if( $httpStatusCode != Response::HTTP_OK ) {
-            throw new LinkedInException("The LinkedIn images endpoint returned an HTTP $httpStatusCode error: $content");
+
+            $renewalUrl = $this->getAuthStartUrl();
+
+            throw
+                (new LinkedInException(
+                    "The LinkedIn images endpoint returned an HTTP $httpStatusCode error: $content", $httpStatusCode
+                ))
+                ->setResponse($content)
+                ->addTokenRenewalUrlToMessage($renewalUrl);
         }
 
         $oJsonResponse = json_decode($content);
@@ -201,5 +210,22 @@ class LinkedInPageMessenger extends BaseMessenger
             // All APIs require the request header
             "X-Restli-Protocol-Version" => "2.0.0"
         ];
+    }
+
+
+    protected function getAuthStartUrl() : string
+    {
+        $baseUrl =
+            $this->parameters->has('router.request_context.scheme') ?
+                $this->parameters->get('router.request_context.scheme') : 'https';
+
+        $baseUrl .= '://';
+
+        $baseUrl .=
+            $this->parameters->has('router.request_context.host') ?
+                $this->parameters->get('router.request_context.host') : 'example.com';
+
+        $baseUrl = rtrim($baseUrl, '/') . LinkedInController::ROUTE_PATH;
+        return $baseUrl;
     }
 }
