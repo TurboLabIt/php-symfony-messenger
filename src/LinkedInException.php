@@ -19,10 +19,7 @@ class LinkedInException extends BaseException
 
     public function addTokenRenewalUrlToMessage(?string $renewalUrl = null) : static
     {
-        if( $this->isExpiredToken() && !empty($renewalUrl) ) {
-            $this->message .= PHP_EOL . "Renew at $renewalUrl";
-        }
-
+        $this->message .= PHP_EOL . "Get a token from $renewalUrl";
         return $this;
     }
 }

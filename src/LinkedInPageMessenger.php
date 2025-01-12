@@ -66,21 +66,26 @@ class LinkedInPageMessenger extends BaseMessenger
 
     protected function getTokenResponseFromFile() : \stdClass
     {
-        $path = $this->getVarDirPath(static::TOKEN_RESPONSE_FILENAME);
+        $path       = $this->getVarDirPath(static::TOKEN_RESPONSE_FILENAME);
+        $authUrl    = $this->getAuthStartUrl();
+
         if( !file_exists($path) ) {
-            throw new LinkedInException("The Bearer token file ##$path## does not exist");
+            throw (new LinkedInException("The Bearer token file ##$path## does not exist"))
+                ->addTokenRenewalUrlToMessage($authUrl);
         }
 
         $content = file_get_contents($path);
 
         if( empty($content) ) {
-            throw new LinkedInException("The Bearer token file ##$path## is empty");
+            throw (new LinkedInException("The Bearer token file ##$path## is empty"))
+                ->addTokenRenewalUrlToMessage($authUrl);
         }
 
         $oJson = json_decode($content);
 
         if( empty($oJson->access_token) ) {
-            throw new LinkedInException("The Bearer token file ##$path## doesn't decode");
+            throw (new LinkedInException("The Bearer token file ##$path## doesn't decode"))
+                ->addTokenRenewalUrlToMessage($authUrl);
         }
 
         return $oJson;
