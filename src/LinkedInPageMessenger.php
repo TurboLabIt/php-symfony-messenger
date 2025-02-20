@@ -12,7 +12,7 @@ class LinkedInPageMessenger extends BaseMessenger
 {
     const SERVICE_NAME              = self::SERVICE_LINKEDIN;
     const TOKEN_RESPONSE_FILENAME   = 'linkedin_token_response.json';
-    const API_VERSION               = '202401';
+    const API_VERSION               = '202502';
     const WEBURL                    = 'https://www.linkedin.com/';
 
     protected array $arrPermissions = ["w_organization_social"];
