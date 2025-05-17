@@ -55,6 +55,8 @@ Open `https://example.com/setup/linkedin/auth/` and follow the authorization flo
 
 You MUST use the LinkedIn account of an administrator of the company page connected to your app.
 
+The auth file will be saved into `var/messenger/linkedin_token_response.json`. *Whosoever holds this file, if he be worthy, shall possess the power to post on the page*.
+
 
 ## 🚀 9. Post!
 
