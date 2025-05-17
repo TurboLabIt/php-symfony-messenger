@@ -88,7 +88,53 @@ class LinkedInPageMessenger extends BaseMessenger
                 ->addTokenRenewalUrlToMessage($authUrl);
         }
 
+
+        $renewed = $this->renewIfExpired($oJson, $path);
+        if($renewed) {
+            return $this->getTokenResponseFromFile();
+        }
+
         return $oJson;
+    }
+
+
+    protected function renewIfExpired(\stdClass $oJson, string $path) : bool
+    {
+        $fileModTime    = filemtime($path);
+        $daysOld        = (time() - $fileModTime) / (60 * 60 * 24);
+
+        if($daysOld <= 45) {
+            return false;
+        }
+
+        $this->lastResponse =
+            $this->httpClient->request('POST', 'https://www.linkedin.com/oauth/v2/accessToken', [
+                "body"  => [
+                    "grant_type"    => "refresh_token",
+                    "refresh_token" => $oJson->refresh_token,
+                    "client_id"     => $this->arrConfig['LinkedIn']['clientId'],
+                    "client_secret" => $this->arrConfig['LinkedIn']['clientSecret']
+                ]
+            ]);
+
+        $content = $this->lastResponse->getContent(false);
+
+        if( empty($content) || $this->lastResponse->getStatusCode() != Response::HTTP_OK ) {
+            throw new LinkedInException("LinkedIn renew error: $content");
+        }
+
+        $oJson = json_decode($content);
+        foreach(['access_token', 'expires_in', 'scope'] as $key) {
+
+            if( empty($oJson->$key) ) {
+                throw new LinkedInException("LinkedIn renew error: ##$key## is empty");
+            }
+        }
+
+        $tokenResponseFilePath = $this->getVarDirPath(static::TOKEN_RESPONSE_FILENAME);
+        file_put_contents($tokenResponseFilePath, json_encode($oJson, JSON_PRETTY_PRINT));
+
+        return true;
     }
 
 
