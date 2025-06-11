@@ -63,6 +63,7 @@ services:
     autowire: true
     public: true
     arguments:
+      $security: '@?Symfony\Bundle\SecurityBundle\Security'
       $arrConfig:
         LinkedIn:
           enabled: '%env(APP_LINKEDIN_ENABLED)%'
