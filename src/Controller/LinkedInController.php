@@ -21,7 +21,7 @@ class LinkedInController extends AbstractController
 
     public function __construct(
         protected LinkedInPageMessenger $messenger, protected UrlGeneratorInterface $urlGenerator,
-        protected Security $security
+        protected ?Security $security = null
     ) {}
 
 
