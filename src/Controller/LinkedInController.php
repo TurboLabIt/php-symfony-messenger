@@ -51,7 +51,7 @@ class LinkedInController extends AbstractController
     {
         $this->enforceAuthorization();
 
-        $code = $request->get('code');
+        $code = $request->query->get('code');
 
         if( empty($code) ) {
             throw new BadRequestHttpException('Invalid LinkedIn code');
