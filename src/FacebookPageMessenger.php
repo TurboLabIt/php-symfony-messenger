@@ -42,8 +42,19 @@ class FacebookPageMessenger extends BaseMessenger
     }
 
 
+    public function getPageUrl() : string
+        { return str_ireplace('##PAGE-ID##', $this->arrConfig["Facebook"]["page"]["id"], static::WEBURL); }
+
+
+    public function buildMessageUrl(string|int $postId) : string { return "https://www.facebook.com/$postId"; }
+
+
     protected function apiCall(string $endPoint, array $arrParam, string $method = Request::METHOD_POST, array $arrHeaders = []) : stdClass
     {
+        if( !$this->isEnabled('Facebook') ) {
+            return (object)["enabled" => false];
+        }
+
         $this->lastResponse = $this->httpClient->request($method, $endPoint, [
             "headers" => array_merge([
                 "Content-Type" => "application/json"
@@ -69,10 +80,4 @@ class FacebookPageMessenger extends BaseMessenger
 
         return $oJson;
     }
-
-
-    public function getPageUrl() : string
-        { return str_ireplace('##PAGE-ID##', $this->arrConfig["Facebook"]["page"]["id"], static::WEBURL); }
-
-    public function buildMessageUrl(string|int $postId) : string { return "https://www.facebook.com/$postId"; }
 }

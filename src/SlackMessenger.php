@@ -36,8 +36,7 @@ class SlackMessenger extends BaseMessenger
 
     protected function apiCall(string $endPoint, array $arrParams = [], string $method = Request::METHOD_POST, array $arrHeaders = []) : stdClass
     {
-        $disabled = array_key_exists("enabled", $this->arrConfig["Slack"]) && !$this->arrConfig["Slack"]["enabled"];
-        if($disabled)  {
+        if( !$this->isEnabled('Slack') ) {
             return (object)["enabled" => false];
         }
 

@@ -40,10 +40,6 @@ class TelegramMessenger extends BaseMessenger
 
     public function sendErrorMessage(string $message, array $arrParams = [], ?string $emoji = '🛑') : stdClass
     {
-        if( empty($this->arrConfig["Telegram"]["enabled"]) || empty($this->arrConfig["Telegram"]["errorsChannelId"]) ) {
-            return new stdClass();
-        }
-
         $fullMessage = $this->getEnvTag(true);
 
         if( !empty($emoji) ) {
@@ -128,8 +124,24 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
+    public function getChannelUrl() : string
+    {
+        return static::WEBURL . '/s/' . trim($this->arrConfig["Telegram"]["channelId"], '@');
+    }
+
+
+    public function buildNewMessageUrl(stdClass $oJsonResponse) : string
+    {
+        return static::WEBURL . trim($this->arrConfig["Telegram"]["channelId"], '@') . "/" . $oJsonResponse->result->message_id;
+    }
+
+
     protected function apiCall(string $endPoint, array $arrParam, string $method = Request::METHOD_POST, array $arrHeaders = []) : stdClass
     {
+        if( !$this->isEnabled('Telegram') ) {
+            return (object)["enabled" => false];
+        }
+
         $this->lastResponse = $this->httpClient->request($method, $endPoint, [
             "headers"   => $arrHeaders,
             "query"     => $arrParam
@@ -152,17 +164,5 @@ class TelegramMessenger extends BaseMessenger
         }
 
         return $oJson;
-    }
-
-
-    public function getChannelUrl() : string
-    {
-        return static::WEBURL . '/s/' . trim($this->arrConfig["Telegram"]["channelId"], '@');
-    }
-
-
-    public function buildNewMessageUrl(stdClass $oJsonResponse) : string
-    {
-        return static::WEBURL . trim($this->arrConfig["Telegram"]["channelId"], '@') . "/" . $oJsonResponse->result->message_id;
     }
 }

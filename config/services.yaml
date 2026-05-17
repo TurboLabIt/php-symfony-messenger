@@ -1,74 +1,77 @@
+parameters:
+    turbolabit_messenger.default_false: false
+    turbolabit_messenger.default_empty_string: ''
+
 services:
+    ## Controllers
+    TurboLabIt\MessengersBundle\Controller\:
+        public: true
+        autowire: true
+        autoconfigure: true
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            $security: '@?Symfony\Bundle\SecurityBundle\Security'
 
-  ## Controllers
-  TurboLabIt\MessengersBundle\Controller\:
-    public: true
-    autowire: true
-    autoconfigure: true
-    resource: '../src/Controller/'
-    tags: [ 'controller.service_arguments' ]
-    arguments:
-      $security: '@?Symfony\Bundle\SecurityBundle\Security'
+    ## Slack
+    TurboLabIt\MessengersBundle\SlackMessenger:
+        autowire: true
+        public: true
+        arguments:
+            $arrConfig:
+                Slack:
+                    enabled: '%env(default:turbolabit_messenger.default_false:bool:APP_SLACK_ENABLED)%'
+                    token: '%env(default:turbolabit_messenger.default_empty_string:APP_SLACK_TOKEN)%'
+                    channelId: '%env(default:turbolabit_messenger.default_empty_string:APP_SLACK_CHANNEL_ID)%'
+                    errorsChannelId: '%env(default:turbolabit_messenger.default_empty_string:APP_SLACK_ERRORS_CHANNEL_ID)%'
 
-  ## Slack
-  TurboLabIt\MessengersBundle\SlackMessenger:
-    autowire: true
-    public: true
-    arguments:
-      $arrConfig:
-        Slack:
-          enabled: '%env(APP_SLACK_ENABLED)%'
-          token: '%env(APP_SLACK_TOKEN)%'
-          channelId: '%env(APP_SLACK_CHANNEL_ID)%'
-          errorsChannelId: '%env(APP_SLACK_ERRORS_CHANNEL_ID)%'
+    ## Telegram
+    TurboLabIt\MessengersBundle\TelegramMessenger:
+        autowire: true
+        public: true
+        arguments:
+            $arrConfig:
+                Telegram:
+                    enabled: '%env(default:turbolabit_messenger.default_false:bool:APP_TELEGRAM_ENABLED)%'
+                    token: '%env(default:turbolabit_messenger.default_empty_string:APP_TELEGRAM_TOKEN)%'
+                    channelId: '%env(default:turbolabit_messenger.default_empty_string:APP_TELEGRAM_CHANNEL_ID)%'
+                    errorsChannelId: '%env(default:turbolabit_messenger.default_empty_string:APP_TELEGRAM_ERRORS_CHANNEL_ID)%'
 
-  ## Telegram
-  TurboLabIt\MessengersBundle\TelegramMessenger:
-    autowire: true
-    public: true
-    arguments:
-      $arrConfig:
-        Telegram:
-          enabled: '%env(APP_TELEGRAM_ENABLED)%'
-          token: '%env(APP_TELEGRAM_TOKEN)%'
-          channelId: '%env(APP_TELEGRAM_CHANNEL_ID)%'
-          errorsChannelId: '%env(APP_TELEGRAM_ERRORS_CHANNEL_ID)%'
+    ## Facebook
+    TurboLabIt\MessengersBundle\FacebookPageMessenger:
+        autowire: true
+        public: true
+        arguments:
+            $arrConfig:
+                Facebook:
+                    enabled: '%env(default:turbolabit_messenger.default_false:bool:APP_FACEBOOK_ENABLED)%'
+                    page:
+                        id: '%env(default:turbolabit_messenger.default_empty_string:APP_FACEBOOK_PAGE_ID)%'
+                        token: '%env(default:turbolabit_messenger.default_empty_string:APP_FACEBOOK_PAGE_TOKEN)%'
 
-  ## Facebook
-  TurboLabIt\MessengersBundle\FacebookPageMessenger:
-    autowire: true
-    public: true
-    arguments:
-        $arrConfig:
-            Facebook:
-                enabled: '%env(APP_FACEBOOK_ENABLED)%'
-                page:
-                  id: '%env(APP_FACEBOOK_PAGE_ID)%'
-                  token: '%env(APP_FACEBOOK_PAGE_TOKEN)%'
+    ## Twitter
+    TurboLabIt\MessengersBundle\TwitterMessenger:
+        autowire: true
+        public: true
+        arguments:
+            $arrConfig:
+                Twitter:
+                    enabled: '%env(default:turbolabit_messenger.default_false:bool:APP_TWITTER_ENABLED)%'
+                    id: '%env(default:turbolabit_messenger.default_empty_string:APP_TWITTER_ID)%'
+                    apiKey: '%env(default:turbolabit_messenger.default_empty_string:APP_TWITTER_API_KEY)%'
+                    apiSecret: '%env(default:turbolabit_messenger.default_empty_string:APP_TWITTER_API_SECRET)%'
+                    accessToken: '%env(default:turbolabit_messenger.default_empty_string:APP_TWITTER_ACCESS_TOKEN)%'
+                    accessTokenSecret: '%env(default:turbolabit_messenger.default_empty_string:APP_TWITTER_ACCESS_TOKEN_SECRET)%'
 
-  ## Twitter
-  TurboLabIt\MessengersBundle\TwitterMessenger:
-    autowire: true
-    public: true
-    arguments:
-      $arrConfig:
-        Twitter:
-          enabled: '%env(APP_TWITTER_ENABLED)%'
-          id: '%env(APP_TWITTER_ID)%'
-          apiKey: '%env(APP_TWITTER_API_KEY)%'
-          apiSecret: '%env(APP_TWITTER_API_SECRET)%'
-          accessToken: '%env(APP_TWITTER_ACCESS_TOKEN)%'
-          accessTokenSecret: '%env(APP_TWITTER_ACCESS_TOKEN_SECRET)%'
-
-  ## LinkedIn
-  TurboLabIt\MessengersBundle\LinkedInPageMessenger:
-    autowire: true
-    public: true
-    arguments:
-      $arrConfig:
-        LinkedIn:
-          enabled: '%env(APP_LINKEDIN_ENABLED)%'
-          oAuthRequiredRoles: '%env(csv:APP_LINKEDIN_OAUTH_REQUIRED_ROLES)%'
-          clientId: '%env(APP_LINKEDIN_CLIENT_ID)%'
-          clientSecret: '%env(APP_LINKEDIN_CLIENT_SECRET)%'
-          organizationId: '%env(APP_LINKEDIN_ORGANIZATION_ID)%'
+    ## LinkedIn
+    TurboLabIt\MessengersBundle\LinkedInPageMessenger:
+        autowire: true
+        public: true
+        arguments:
+            $arrConfig:
+                LinkedIn:
+                    enabled: '%env(default:turbolabit_messenger.default_false:bool:APP_LINKEDIN_ENABLED)%'
+                    oAuthRequiredRoles: '%env(default:turbolabit_messenger.default_empty_string:csv:APP_LINKEDIN_OAUTH_REQUIRED_ROLES)%'
+                    clientId: '%env(default:turbolabit_messenger.default_empty_string:APP_LINKEDIN_CLIENT_ID)%'
+                    clientSecret: '%env(default:turbolabit_messenger.default_empty_string:APP_LINKEDIN_CLIENT_SECRET)%'
+                    organizationId: '%env(default:turbolabit_messenger.default_empty_string:APP_LINKEDIN_ORGANIZATION_ID)%'

@@ -140,6 +140,10 @@ class LinkedInPageMessenger extends BaseMessenger
 
     public function sendUrl(string $title, string $url, ?string $imageUrl = null) : ?string
     {
+        if( !$this->isEnabled('LinkedIn') ) {
+            return 'linkedin-messenger-is-disable';
+        }
+
         $title = $this->messageEncoder($title);
         $isProd = $this->parameters->get("kernel.environment") == "prod";
 
@@ -186,6 +190,10 @@ class LinkedInPageMessenger extends BaseMessenger
 
     public function uploadImage(string $imageUrl) : string
     {
+        if( !$this->isEnabled('LinkedIn') ) {
+            return 'linkedin-messenger-is-disable';
+        }
+
         // https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/images-api
         $oMessage = (object)[
             "initializeUploadRequest" => (object)[

@@ -26,6 +26,10 @@ class TwitterMessenger extends BaseMessenger
 
     public function sendMessage(?string $message) : string
     {
+        if( !$this->isEnabled('Twitter') ) {
+            return 'twitter-messenger-is-disable';
+        }
+
         $tag = $this->getEnvTag();
         if( !empty($tag) ) {
             $message = "$tag $message";

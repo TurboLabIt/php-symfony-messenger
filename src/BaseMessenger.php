@@ -25,6 +25,13 @@ abstract class BaseMessenger
     ) {}
 
 
+
+    public function isEnabled(string $serviceName) : bool
+    {
+        return !empty($this->arrConfig[$serviceName]["enabled"]);
+    }
+
+
     protected function getEnvTag(bool $includeProd = false) : string
     {
         $env = $this->parameters->get("kernel.environment");
