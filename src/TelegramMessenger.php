@@ -59,18 +59,6 @@ class TelegramMessenger extends BaseMessenger
     }
 
 
-    protected function getEnvTag(bool $includeProd = false) : string
-    {
-        $envTag = parent::getEnvTag($includeProd);
-        $envTag = trim($envTag);
-        if( empty($envTag) ) {
-            return $envTag;
-        }
-
-        return "<b>{$envTag}</b> ";
-    }
-
-
     public function sendMessage(string $message, array $arrParams) : stdClass
     {
         // 📚 https://core.telegram.org/bots/api#sendmessage
