@@ -8,6 +8,7 @@ services:
             - { name: kernel.event_listener, method: onCommandFailure,  event: console.error }
 ````
 
+
 ## src/EventListener/CommandFailureListener.php
 
 ````php
