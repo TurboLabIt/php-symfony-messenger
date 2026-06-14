@@ -150,7 +150,7 @@ class LinkedInPageMessenger extends BaseMessenger
         // https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api?tabs=http#article-post-creation-sample-request
         $oMessage = (object)[
             "author"            => "urn:li:organization:" . $this->arrConfig['LinkedIn']['organizationId'],
-            "commentary"        => $this->getEnvTag(false),
+            "commentary"        => $this->getEnvTag(),
             "visibility"        => $isProd ? "PUBLIC" : "LOGGED_IN",
             "distribution"      => (object)[
                 "feedDistribution"  => $isProd ? "MAIN_FEED" : "NONE",
