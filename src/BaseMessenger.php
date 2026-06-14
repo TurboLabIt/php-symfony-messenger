@@ -27,7 +27,10 @@ abstract class BaseMessenger
         protected array $arrConfig, protected HttpClientInterface $httpClient,
         protected ParameterBagInterface $parameters,
         protected UrlGeneratorInterface $urlGenerator
-    ) {}
+    )
+    {
+        $this->init();
+    }
 
 
     protected function init() : void {}
