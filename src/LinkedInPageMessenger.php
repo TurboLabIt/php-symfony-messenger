@@ -3,6 +3,7 @@ namespace TurboLabIt\MessengersBundle;
 
 use Symfony\Component\HttpFoundation\Response;
 use TurboLabIt\MessengersBundle\Controller\LinkedInController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 /**
