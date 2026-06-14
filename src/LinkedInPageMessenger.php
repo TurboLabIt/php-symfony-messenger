@@ -67,7 +67,7 @@ class LinkedInPageMessenger extends BaseMessenger
     protected function getTokenResponseFromFile() : \stdClass
     {
         $path       = $this->getVarDirPath(static::TOKEN_RESPONSE_FILENAME);
-        $authUrl    = $this->getAuthStartUrl();
+        $authUrl    = $this->urlGenerator->generate(LinkedInController::ROUTE_NAME_START, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if( !file_exists($path) ) {
             throw (new LinkedInException("The Bearer token file ##$path## does not exist"))
@@ -212,7 +212,7 @@ class LinkedInPageMessenger extends BaseMessenger
 
         if( $httpStatusCode != Response::HTTP_OK ) {
 
-            $renewalUrl = $this->getAuthStartUrl();
+            $renewalUrl = $this->urlGenerator->generate(LinkedInController::ROUTE_NAME_START, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
             throw
                 (new LinkedInException(
@@ -269,22 +269,5 @@ class LinkedInPageMessenger extends BaseMessenger
             // All APIs require the request header
             "X-Restli-Protocol-Version" => "2.0.0"
         ];
-    }
-
-
-    protected function getAuthStartUrl() : string
-    {
-        $baseUrl =
-            $this->parameters->has('router.request_context.scheme') ?
-                $this->parameters->get('router.request_context.scheme') : 'https';
-
-        $baseUrl .= '://';
-
-        $baseUrl .=
-            $this->parameters->has('router.request_context.host') ?
-                $this->parameters->get('router.request_context.host') : 'example.com';
-
-        $baseUrl = rtrim($baseUrl, '/') . LinkedInController::ROUTE_PATH;
-        return $baseUrl;
     }
 }

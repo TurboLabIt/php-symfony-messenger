@@ -17,7 +17,10 @@ use TurboLabIt\MessengersBundle\LinkedInPageMessenger;
  */
 class LinkedInController extends AbstractController
 {
-    const ROUTE_PATH = '/setup/linkedin/auth/';
+    const ROUTE_PATH            = '/setup/linkedin/auth/';
+    const ROUTE_NAME_START      = 'turbolabit_messengers_linkedin_auth_start';
+    const ROUTE_NAME_RETURN_TO  = 'turbolabit_messengers_linkedin_auth_code-return-to';
+
 
     public function __construct(
         protected LinkedInPageMessenger $messenger, protected UrlGeneratorInterface $urlGenerator,
@@ -25,28 +28,18 @@ class LinkedInController extends AbstractController
     ) {}
 
 
-    #[Route(self::ROUTE_PATH, name: 'turbolabit_messengers_linkedin_auth_start')]
+    #[Route(self::ROUTE_PATH, name: self::ROUTE_NAME_START)]
     public function linkedInAuth() : Response
     {
         $this->enforceAuthorization();
 
-        $returnToUrl = $this->getCodeReturnToUrl();
+        $returnToUrl = $this->urlGenerator->generate(self::ROUTE_NAME_RETURN_TO, [], UrlGeneratorInterface::ABSOLUTE_URL);
         $linkedInAuthUrl = $this->messenger->getAuthCodeUrl($returnToUrl);
         return new Response('<a href="' . $linkedInAuthUrl . '">Start LinkedIn auth</a>');
     }
 
 
-    protected function getCodeReturnToUrl() : string
-    {
-        return
-            $this->urlGenerator->generate(
-                'turbolabit_messengers_linkedin_auth_code-return-to', [],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
-    }
-
-
-    #[Route(self::ROUTE_PATH . 'code-return-to/', name: 'turbolabit_messengers_linkedin_auth_code-return-to')]
+    #[Route(self::ROUTE_PATH . 'code-return-to/', name: self::ROUTE_NAME_RETURN_TO)]
     public function linkedAuthCodeReturnTo(Request $request) : Response
     {
         $this->enforceAuthorization();
@@ -57,7 +50,7 @@ class LinkedInController extends AbstractController
             throw new BadRequestHttpException('Invalid LinkedIn code');
         }
 
-        $returnToUrl = $this->getCodeReturnToUrl();
+        $returnToUrl = $this->urlGenerator->generate(self::ROUTE_NAME_RETURN_TO, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $this->messenger->exchangeAuthCodeForToken($code, $returnToUrl);
 

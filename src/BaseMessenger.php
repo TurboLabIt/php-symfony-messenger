@@ -24,9 +24,12 @@ abstract class BaseMessenger
 
     public function __construct(
         protected array $arrConfig, protected HttpClientInterface $httpClient,
-        protected ParameterBagInterface $parameters
+        protected ParameterBagInterface $parameters,
+        protected UrlGeneratorInterface $urlGenerator
     ) {}
 
+
+    protected function init() : void {}
 
 
     public function isEnabled(string $serviceName) : bool

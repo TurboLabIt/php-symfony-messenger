@@ -15,9 +15,9 @@ class TwitterMessenger extends BaseMessenger
     protected TwitterOAuth $twitterOAuth;
 
 
-    public function __construct(protected array $arrConfig, protected ParameterBagInterface $parameters)
+    protected function init(): void
     {
-        $oConfig = (object)$arrConfig["Twitter"];
+        $oConfig = (object)$this->arrConfig["Twitter"];
         $this->twitterOAuth = new TwitterOAuth(
             $oConfig->apiKey, $oConfig->apiSecret, $oConfig->accessToken, $oConfig->accessTokenSecret
         );
