@@ -15,7 +15,7 @@
     "php": "^8",
     "symfony/http-client": "@stable",
     "abraham/twitteroauth": "@stable",
-    "turbolabit/php-traits": "dev-master"
+    "turbolabit/php-traits": "dev-main"
   },
   "autoload": {
     "psr-4": {
