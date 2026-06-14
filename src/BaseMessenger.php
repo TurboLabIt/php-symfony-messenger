@@ -5,6 +5,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use TurboLabIt\Traits\SymfonyEnvTrait;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 abstract class BaseMessenger
