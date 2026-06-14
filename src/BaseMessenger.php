@@ -4,10 +4,13 @@ namespace TurboLabIt\MessengersBundle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use TurboLabIt\Traits\SymfonyEnvTrait;
 
 
 abstract class BaseMessenger
 {
+    use SymfonyEnvTrait;
+
     const VAR_DIR_NAME      = 'messenger';
 
     const SERVICE_TELEGRAM  = 'telegram';
@@ -29,18 +32,6 @@ abstract class BaseMessenger
     public function isEnabled(string $serviceName) : bool
     {
         return !empty($this->arrConfig[$serviceName]["enabled"]);
-    }
-
-
-    protected function getEnvTag(bool $includeProd = false) : string
-    {
-        $env = $this->parameters->get("kernel.environment");
-
-        if( $env == 'prod' && !$includeProd ) {
-            return '';
-        }
-
-        return "[" . strtoupper($env) . "] ";
     }
 
 

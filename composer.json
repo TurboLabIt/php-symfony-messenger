@@ -9,10 +9,13 @@
       "email": "info@turbolab.it"
     }
   ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": "^8",
     "symfony/http-client": "@stable",
-    "abraham/twitteroauth": "@stable"
+    "abraham/twitteroauth": "@stable",
+    "turbolabit/php-traits": "dev-master"
   },
   "autoload": {
     "psr-4": {
