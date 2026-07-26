@@ -13,6 +13,8 @@ class LinkedInPageMessenger extends BaseMessenger
 {
     const SERVICE_NAME              = self::SERVICE_LINKEDIN;
     const TOKEN_RESPONSE_FILENAME   = 'linkedin_token_response.json';
+    const OAUTH_STATE_FILENAME      = 'linkedin_oauth_state.txt';
+    const OAUTH_STATE_TTL_SECONDS   = 600; // 10 min: the admin round-trip through LinkedIn is quick
     const API_VERSION               = '202605';
     const WEBURL                    = 'https://www.linkedin.com/';
 
@@ -25,10 +27,49 @@ class LinkedInPageMessenger extends BaseMessenger
     public function getAuthCodeUrl(string $returnToUrl) : string
     {
         $clientId       = $this->arrConfig['LinkedIn']['clientId'];
+        $state          = $this->generateAndStoreOAuthState();
         $returnToUrl    = urlencode($returnToUrl);
 
         return "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=$clientId&" .
-                    "redirect_uri=$returnToUrl&scope=" . implode('%20', $this->arrPermissions);
+                    "redirect_uri=$returnToUrl&state=$state&scope=" . implode('%20', $this->arrPermissions);
+    }
+
+
+    /**
+     * OAuth CSRF protection: mint a CSPRNG `state`, persist it server-side, and
+     * append it to the authorization URL. The callback must return the exact same value (see
+     * verifyAndConsumeOAuthState) — without it nothing binds the callback to an admin-initiated flow,
+     * so a crafted link could make the site exchange an attacker's `code`. Stored in var/ rather than
+     * the session because the app firewall is stateless (same reason the access token lives there);
+     * it is not a long-term secret — it is a single-use, short-lived URL parameter.
+     */
+    protected function generateAndStoreOAuthState() : string
+    {
+        $state = bin2hex(random_bytes(32));
+        file_put_contents($this->getVarDirPath(static::OAUTH_STATE_FILENAME), $state);
+        return $state;
+    }
+
+
+    /**
+     * Verify the `state` returned on the callback against the stored one, then consume it (single-use).
+     * Fail-closed: throws unless a non-expired stored state matches exactly (constant-time compare).
+     */
+    public function verifyAndConsumeOAuthState(?string $state) : void
+    {
+        $path   = $this->getVarDirPath(static::OAUTH_STATE_FILENAME);
+        $exists = is_file($path);
+        $stored = $exists ? trim((string)file_get_contents($path)) : '';
+        $fresh  = $exists && ( time() - (int)filemtime($path) ) <= static::OAUTH_STATE_TTL_SECONDS;
+
+        // single-use: always consume the stored state, whatever the outcome
+        if( $exists ) {
+            @unlink($path);
+        }
+
+        if( $stored === '' || !$fresh || !is_string($state) || $state === '' || !hash_equals($stored, $state) ) {
+            throw new LinkedInException("Invalid, missing or expired OAuth state — restart the LinkedIn authorization");
+        }
     }
 
 

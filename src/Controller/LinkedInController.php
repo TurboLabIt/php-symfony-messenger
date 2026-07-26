@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use TurboLabIt\MessengersBundle\LinkedInException;
 use TurboLabIt\MessengersBundle\LinkedInPageMessenger;
 
 
@@ -44,10 +45,18 @@ class LinkedInController extends AbstractController
     {
         $this->enforceAuthorization();
 
-        $code = $request->query->get('code');
+        $code   = $request->query->get('code');
+        $state  = $request->query->get('state');
 
         if( empty($code) ) {
             throw new BadRequestHttpException('Invalid LinkedIn code');
+        }
+
+        // reject any callback not tied to an admin-initiated flow
+        try {
+            $this->messenger->verifyAndConsumeOAuthState($state);
+        } catch(LinkedInException $ex) {
+            throw new BadRequestHttpException($ex->getMessage());
         }
 
         $returnToUrl = $this->urlGenerator->generate(self::ROUTE_NAME_RETURN_TO, [], UrlGeneratorInterface::ABSOLUTE_URL);
